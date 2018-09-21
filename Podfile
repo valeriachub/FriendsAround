@@ -7,5 +7,6 @@ target 'FriendsAround' do
   # Pods for FriendsAround
 
  pod 'Alamofire'
+ pod 'AlamofireImage'
 
 end
