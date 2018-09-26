@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AlamofireImage
+import Alamofire
 
 class FriendTableViewCell: UITableViewCell {
     
@@ -14,9 +16,15 @@ class FriendTableViewCell: UITableViewCell {
     
     @IBOutlet weak var pictureView: UIImageView!
     @IBOutlet weak var nameView: UILabel!
-
+    
+    //MARK: - Lifecycle Methods
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        pictureView.af_cancelImageRequest()
     }
 }
