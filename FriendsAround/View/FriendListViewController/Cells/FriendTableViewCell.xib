@@ -26,11 +26,17 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="srL-YQ-Mne">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="srL-YQ-Mne">
                         <rect key="frame" x="16" y="4" width="50" height="50.5"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="srL-YQ-Mne" secondAttribute="height" multiplier="1:1" id="ILo-We-nr0"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="25"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
                     </imageView>
                 </subviews>
                 <constraints>
@@ -51,4 +57,7 @@
             <point key="canvasLocation" x="34" y="16.5"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="placeholder" width="750" height="750"/>
+    </resources>
 </document>

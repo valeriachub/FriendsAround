@@ -12,8 +12,8 @@ class FriendViewController: UIViewController {
     
     //MARK: - Properties
     
-    var friend : Friend?
-    let presenter = FriendPresenter()
+    var data : Friend?
+    var presenter : FriendPresenter?
     
     //MARK: - Outlets
     
@@ -26,24 +26,9 @@ class FriendViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let friend = friend else {fatalError()}
-        title = friend.name
-        setupFriend(friend)
-    }
-    
-    //MARK: - Setup Methods
-    
-    func setupFriend(_ friend : Friend){
-        nameView.text = friend.name
-        ageView.text = "\(friend.age!)"
-        
-        pictureView.image = UIImage(named: "placeholder")?.af_imageRoundedIntoCircle()
-        
-        ImageLoader().getImageData(by: friend.picture!, {
-            [unowned self]
-            (imageData) in
-            self.pictureView.image = UIImage(data: imageData)?.af_imageRoundedIntoCircle()
-        })
+        guard let data = data else {fatalError()}
+        presenter = FriendPresenter(data)
+        presenter?.attachView(self)
     }
     
     //MARK: - Actions
@@ -53,6 +38,24 @@ class FriendViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        presenter.prepareMap(for: friend!, segue: segue)
+        presenter?.prepareSegue(segue: segue)
     }
+}
+
+//MARK: - Extension FriendView
+
+extension FriendViewController : FriendView {
+    func setData(_ data : Friend) {
+        title = data.name
+        nameView.text = data.name
+        ageView.text = "\(data.age!)"
+        
+         ImageLoader().getImageData(by: data.picture!, {
+            [unowned self]
+            (imageData) in
+            self.pictureView.image = UIImage(data: imageData)
+        })
+    }
+    
+    
 }

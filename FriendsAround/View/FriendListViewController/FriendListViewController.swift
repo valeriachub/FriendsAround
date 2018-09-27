@@ -13,12 +13,11 @@ class FriendListViewController: UIViewController {
     
     //MARK: - Properties
     
-    var friends : [Friend] = [Friend]()
     let presenter = FriendListPresenter()
     
     //MARK: - Outlets
     
-    @IBOutlet weak var friendsTableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
     
     //MARK: - Lifecycle Methods
@@ -27,28 +26,25 @@ class FriendListViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         setupProgressIndicator()
-        
         presenter.attachView(self)
-        presenter.getFriends()
     }
     
     //MARK: - Setup Methods
     
     func setupTableView(){
-        friendsTableView.delegate = self
-        friendsTableView.dataSource = self
+        tableView.delegate = self
+        tableView.dataSource = self
         
-        friendsTableView.rowHeight = 60.0
-        friendsTableView.tableFooterView = UITableView()
+        tableView.rowHeight = 60.0
+        tableView.tableFooterView = UITableView()
         
-        friendsTableView.register(UINib(nibName: "FriendTableViewCell", bundle: nil), forCellReuseIdentifier: "\(FriendTableViewCell.self)")
+        tableView.register(UINib(nibName: "\(FriendTableViewCell.self)", bundle: nil), forCellReuseIdentifier: "\(FriendTableViewCell.self)")
     }
     
     func setupProgressIndicator(){
         progressIndicator.stopAnimating()
         progressIndicator.hidesWhenStopped = true
     }
-    
 }
 
 //MARK: - Extension UITableViewDataSource
@@ -56,11 +52,11 @@ class FriendListViewController: UIViewController {
 extension FriendListViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return friends.count
+        return presenter.getNumberOfRowsInSection()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return FriendTableRow().getFriendListCell(with: friends[indexPath.row], tableView, cellForRowAt: indexPath)
+        return presenter.getCellForRow(tableView, at: indexPath)
     }
 }
 
@@ -74,8 +70,9 @@ extension FriendListViewController : UITableViewDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let friend = friends[(friendsTableView.indexPathForSelectedRow?.row)!]
-        presenter.prepareFriend(friend: friend, segue: segue)
+        if let row = tableView.indexPathForSelectedRow?.row{
+        presenter.prepareSegue(selectedRow: row, segue: segue)
+        }
     }
 }
 
@@ -90,9 +87,8 @@ extension FriendListViewController : FriendListView {
         progressIndicator.stopAnimating()
     }
     
-    func setFriends(_ friends: [Friend]) {
-        self.friends = friends
-        friendsTableView.reloadData()
+    func reloadTable() {
+        tableView.reloadData()
     }
 }
 

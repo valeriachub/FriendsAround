@@ -11,13 +11,14 @@ import UIKit
 protocol FriendListView : NSObjectProtocol {
     func startLoading()
     func finishLoading()
-    func setFriends(_ friends : [Friend])
+    func reloadTable()
 }
 
 class FriendListPresenter {
     
     //MARK: - Properties
     
+    var friends : [Friend] = [Friend]()
     weak var friendListView : FriendListView?
     let dataService = FriendDataService.shared
     
@@ -25,6 +26,7 @@ class FriendListPresenter {
     
     func attachView(_ view : FriendListView){
         self.friendListView = view
+        getFriends()
     }
     
     func detachView(){
@@ -39,17 +41,27 @@ class FriendListPresenter {
             [unowned self]
             friends in
             self.friendListView?.finishLoading()
-            self.friendListView?.setFriends(friends)
+            self.friends = friends
+            self.friendListView?.reloadTable()
         }
+    }
+    
+    func getNumberOfRowsInSection() -> Int{
+        return friends.count
+    }
+    
+    func getCellForRow(_ tableView : UITableView, at indexPath : IndexPath) -> UITableViewCell{
+         return FriendTableRow().getFriendListCell(with: friends[indexPath.row], tableView, cellForRowAt: indexPath)
     }
     
     //MARK: - Navigation Methods
     
-    func prepareFriend(friend : Friend, segue : UIStoryboardSegue){
+    func prepareSegue(selectedRow : Int, segue : UIStoryboardSegue){
+        let friend = friends[selectedRow]
         switch segue.identifier {
         case Segue.FriendSegue.rawValue:
             if let destination = segue.destination as? FriendViewController {
-                destination.friend = friend
+                destination.data = friend
             }
         default:
             print("Wrong segue")

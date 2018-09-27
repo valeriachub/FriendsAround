@@ -8,14 +8,40 @@
 
 import UIKit
 
+protocol FriendView : NSObjectProtocol {
+    func setData(_ friend: Friend)
+}
+
 class FriendPresenter {
     
-    func prepareMap(for friend : Friend, segue : UIStoryboardSegue){
+    //MARK: - Properties
+    
+    var friend : Friend?
+    weak var friendView : FriendView?
+    
+    //MARK: Lifecycle Methods
+    
+    init(_ friend : Friend){
+        self.friend = friend
+    }
+    
+    func attachView(_ view : FriendView){
+        self.friendView = view
+        friendView?.setData(friend!)
+    }
+    
+    func detachView(){
+        self.friendView = nil
+    }
+    
+    //MARK: - Navigation Methods
+    
+    func prepareSegue(segue : UIStoryboardSegue){
         switch segue.identifier {
         case Segue.MapSegue.rawValue:
             if let destination = segue.destination as? MapViewController{
-                destination.latitude = friend.latitude
-                destination.longitude = friend.longitude
+                destination.latitude = friend?.latitude
+                destination.longitude = friend?.longitude
             }
         default:
             print("Wrong segue")

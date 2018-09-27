@@ -17,11 +17,9 @@ class FriendTableRow {
         print("index  = \(indexPath.row)")
         
         cell.nameView.text = friend.name
-        cell.pictureView?.image = UIImage(named: "placeholder")?.af_imageRoundedIntoCircle()
-        
         ImageLoader().getImageData(by: friend.picture!, {
             (imageData) in
-            cell.pictureView?.image = UIImage(data: imageData)?.af_imageRoundedIntoCircle()
+            cell.pictureView?.image = UIImage(data: imageData)
         })
         
         return cell
