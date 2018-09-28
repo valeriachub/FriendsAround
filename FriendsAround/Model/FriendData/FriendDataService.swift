@@ -21,10 +21,9 @@ class FriendDataService {
     private let remoteSource = RemoteSource()
     private let appSource = AppSource()
     
-    
     //MARK: - Get Data Methods
     
-    func getFriends(_ callback : @escaping ([Friend]) -> Void){
+    func getFriends(_ callback : @escaping ([FriendModel]) -> Void){
         
         if !appSource.isNotFirstLaunch() {
             remoteSource.loadFriends {

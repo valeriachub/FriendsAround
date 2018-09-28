@@ -10,13 +10,14 @@ import UIKit
 
 class FriendTableRow {
     
-    func getFriendListCell(with friend : Friend, _ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> FriendTableViewCell {
+    func getFriendListCell(with friend : FriendModel, _ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> FriendTableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(FriendTableViewCell.self)", for: indexPath) as? FriendTableViewCell
-            else {fatalError("dequeueReusableCell Error")}
-        
-        print("index  = \(indexPath.row)")
-        
+            else {fatalError("FriendTableRow DequeueReusableCell Error")}
+      
         cell.nameView.text = friend.name
+        
+        //TODO: Move in another place
+        
         ImageLoader().getImageData(by: friend.picture!, {
             (imageData) in
             cell.pictureView?.image = UIImage(data: imageData)

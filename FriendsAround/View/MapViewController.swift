@@ -14,11 +14,11 @@ class MapViewController: UIViewController {
     
     //MARK: - Properties
     
-    var latitude : Double?
-    var longitude : Double?
+    var presenter : MapPresenter!
+    var coordinator : MapConfiguratorImpl!
     
     var initialLocation : CLLocation?
-    let radius : CLLocationDistance = 1000
+    var radius : CLLocationDistance?
     
     //MARK: - Outlets
     
@@ -29,13 +29,35 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Address"
-        
-        initialLocation = CLLocation(latitude: 48.856613, longitude: 2.352222)
-        centerMapOnLocation(location: initialLocation!, radius: radius)
+        coordinator.configure(mapViewController: self)
+        presenter.viewDidLoad()
+    }
+}
+
+//MARK: - Extension MapView
+
+extension MapViewController : MapView {
+    
+    func setTitle(title: String) {
+        self.title = title
     }
     
-    //MARK: - Map Methods
+    func setLatitudeLongitude(latitude: Double, longitude: Double) {
+        initialLocation = CLLocation(latitude: latitude, longitude: longitude)
+    }
+    
+    func setRadius(radius: Int) {
+        self.radius = CLLocationDistance(radius)
+    }
+    
+    func centerMap() {
+        centerMapOnLocation(location: initialLocation!, radius: radius!)
+    }
+}
+
+//MARK: - Extension Map
+
+extension MapViewController {
     
     func centerMapOnLocation(location : CLLocation, radius : CLLocationDistance){
         let region = MKCoordinateRegionMakeWithDistance(location.coordinate, radius, radius)

@@ -9,6 +9,8 @@
 import UIKit
 
 protocol FriendListView : NSObjectProtocol {
+    func setupTable()
+    func setupProgressIndicator()
     func startLoading()
     func finishLoading()
     func reloadTable()
@@ -18,19 +20,22 @@ class FriendListPresenter {
     
     //MARK: - Properties
     
-    var friends : [Friend] = [Friend]()
+    var friends : [FriendModel] = [FriendModel]()
     weak var friendListView : FriendListView?
+    let router : FriendListRouter
     let dataService = FriendDataService.shared
     
     //MARK: - Lifecycle Methods
     
-    func attachView(_ view : FriendListView){
+    init(view : FriendListView, router : FriendListRouter){
         self.friendListView = view
-        getFriends()
+        self.router = router
     }
     
-    func detachView(){
-        self.friendListView = nil
+    func viewDidLoad(){
+        getFriends()
+        friendListView?.setupTable()
+        friendListView?.setupProgressIndicator()
     }
     
     //MARK: - Data Methods
@@ -56,15 +61,8 @@ class FriendListPresenter {
     
     //MARK: - Navigation Methods
     
-    func prepareSegue(selectedRow : Int, segue : UIStoryboardSegue){
-        let friend = friends[selectedRow]
-        switch segue.identifier {
-        case Segue.FriendSegue.rawValue:
-            if let destination = segue.destination as? FriendViewController {
-                destination.data = friend
-            }
-        default:
-            print("Wrong segue")
-        }
+    func didSelect(row : Int){
+        let friend = friends[row]
+        router.presentDetails(for: friend)
     }
 }

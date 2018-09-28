@@ -60,10 +60,10 @@
             </objects>
             <point key="canvasLocation" x="1388" y="31.934032983508249"/>
         </scene>
-        <!--Friend View Controller-->
+        <!--Friend Details View Controller-->
         <scene sceneID="3SP-cK-mWg">
             <objects>
-                <viewController id="erP-DK-ZnQ" customClass="FriendViewController" customModule="FriendsAround" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="erP-DK-ZnQ" customClass="FriendDetailsViewController" customModule="FriendsAround" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JVM-RH-2bK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

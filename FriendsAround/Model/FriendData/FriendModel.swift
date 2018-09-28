@@ -1,5 +1,5 @@
 //
-//  Friend.swift
+//  FriendModel.swift
 //  FriendsAround
 //
 //  Created by Valeria on 26.09.2018.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Friend {
+class FriendModel {
     
     var name : String?
     var picture : String?

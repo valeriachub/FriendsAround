@@ -13,7 +13,8 @@ class FriendListViewController: UIViewController {
     
     //MARK: - Properties
     
-    let presenter = FriendListPresenter()
+    var configurator = FriendListConfiguratorImpl()
+    var presenter : FriendListPresenter!
     
     //MARK: - Outlets
     
@@ -24,26 +25,13 @@ class FriendListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTableView()
-        setupProgressIndicator()
-        presenter.attachView(self)
+        
+        configurator.configure(friendListViewController: self)
+        presenter.viewDidLoad()
     }
     
-    //MARK: - Setup Methods
-    
-    func setupTableView(){
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        tableView.rowHeight = 60.0
-        tableView.tableFooterView = UITableView()
-        
-        tableView.register(UINib(nibName: "\(FriendTableViewCell.self)", bundle: nil), forCellReuseIdentifier: "\(FriendTableViewCell.self)")
-    }
-    
-    func setupProgressIndicator(){
-        progressIndicator.stopAnimating()
-        progressIndicator.hidesWhenStopped = true
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        presenter.router.prepare(for: segue, sender: sender)
     }
 }
 
@@ -65,20 +53,30 @@ extension FriendListViewController : UITableViewDataSource {
 extension FriendListViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: Segue.FriendSegue.rawValue, sender: self)
+        presenter.didSelect(row : indexPath.row)
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let row = tableView.indexPathForSelectedRow?.row{
-        presenter.prepareSegue(selectedRow: row, segue: segue)
-        }
     }
 }
 
 //MARK: - Extension FriendListView
 
 extension FriendListViewController : FriendListView {
+    
+    func setupTable(){
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.rowHeight = 60.0
+        tableView.tableFooterView = UITableView()
+        
+        tableView.register(UINib(nibName: "\(FriendTableViewCell.self)", bundle: nil), forCellReuseIdentifier: "\(FriendTableViewCell.self)")
+    }
+    
+    func setupProgressIndicator(){
+        progressIndicator.stopAnimating()
+        progressIndicator.hidesWhenStopped = true
+    }
+    
     func startLoading() {
         progressIndicator.startAnimating()
     }

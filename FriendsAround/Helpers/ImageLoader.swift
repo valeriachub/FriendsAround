@@ -20,7 +20,7 @@ class ImageLoader {
                         callback(data)
                     }
                 }catch{
-                    print("Error")
+                    print("Error loading image")
                 }
             }
         }

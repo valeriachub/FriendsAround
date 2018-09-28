@@ -12,8 +12,8 @@ class RemoteSource{
     
     let END_POINT = "https://randomuser.me/api/"
     
-    func loadFriends(_ callback : @escaping ([Friend]) -> Void){
-        var friends = [Friend]()
+    func loadFriends(_ callback : @escaping ([FriendModel]) -> Void){
+        var friends = [FriendModel]()
         
         let dispatchGroup = DispatchGroup()
         
@@ -23,7 +23,7 @@ class RemoteSource{
                 do{
                     let data = try Data(contentsOf: url!)
                     let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    if let friend = Friend(from: json){
+                    if let friend = FriendModel(from: json){
                         friends.append(friend)
                     }
                 }catch{

@@ -18,13 +18,13 @@ class LocalSource {
     
     //MARK: - Get Methods
     
-    func getFriends() -> [Friend] {
+    func getFriends() -> [FriendModel] {
         let userRequest : NSFetchRequest<User> = User.fetchRequest()
-        var friends = [Friend]()
+        var friends = [FriendModel]()
         do{
             let users = try managedContext.fetch(userRequest)
             for user in users {
-                let friend = Friend(from:user)
+                let friend = FriendModel(from:user)
                 friends.append(friend)
             }
         }catch{
@@ -35,13 +35,13 @@ class LocalSource {
     
     //MARK - Save Methods
     
-    func saveFriends(_ friends : [Friend]) {
+    func saveFriends(_ friends : [FriendModel]) {
         for friend in friends {
             saveFriend(friend)
         }
     }
     
-    private func saveFriend(_ friend : Friend) {
+    private func saveFriend(_ friend : FriendModel) {
         let user = User(context: managedContext)
         user.name = friend.name
         user.picture = friend.picture
